@@ -16,6 +16,6 @@ cohere==4.47
 tiktoken==0.6.0
 langchain-openai==0.0.6
 
-"unstructured[all-docs]"
-"unstructured[openai]"
+unstructured[all-docs]
+unstructured[openai]
 chromadb
