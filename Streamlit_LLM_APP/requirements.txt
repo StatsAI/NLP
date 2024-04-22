@@ -1,0 +1,17 @@
+#streamlit==1.25.0
+streamlit==1.31.1
+pandas==2.0.3
+matplotlib==3.7.2
+Pillow==9.5.0
+tqdm==4.65.0
+numpy==1.22.0
+torch==2.0.1
+torchvision==0.15.2
+sentence-transformers
+qdrant_client==1.3.2 
+pyarrow
+openai==1.12.0
+langchain==0.1.7
+cohere==4.47 
+tiktoken==0.6.0
+langchain-openai==0.0.6
