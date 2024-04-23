@@ -86,7 +86,7 @@ st.set_option('deprecation.showPyplotGlobalUse', False)
 
 # #st.write('')
 # #st.write('')
-st.title("CNN Trending News Automatic/Search Summarization via LangChain + ChromaDB + OpenAI")
+st.title("CNN Trending News Automatic Summarization via LangChain + ChromaDB + OpenAI")
 st.write("This app performs document search using a pipeline consisting of ChromaDB, OpenAI API, and LangChain")
 
 # images_recs = st.sidebar.slider(label = 'Image Search: Select an animal using the slider', min_value = 1,
