@@ -226,7 +226,7 @@ if st.sidebar.button('Summarize relevant docs'):
 		
 	if data_source == "Web":
 		result = import_html_from_web()
-		result = result[0]
+		result = result[0:10]
 		st.write(result)
 		
 	#st.pyplot(plot_similar_images_new(image_path, text_input, number_of_images = 17))
