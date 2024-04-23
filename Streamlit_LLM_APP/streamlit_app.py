@@ -223,6 +223,11 @@ def import_html_from_web():
 	return links, cnn_lite_url
 
 def process_text():
+
+	links, = import_html_from_web()
+
+	loaders = UnstructuredURLLoader(urls=links, show_progress_bar=True)
+	docs = loaders.load()
 	
 	embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 	vectorstore = Chroma.from_documents(docs, embeddings)
