@@ -227,7 +227,7 @@ if st.sidebar.button('Summarize relevant docs'):
 	if data_source == "Web":
 		result,url = import_html_from_web()
 		result = result[:-2]
-		st.write("Visit the source at:" + url)
+		st.write("Visit the source at: " + url)
 		##st.write(url)
 		st.write("Here are the articles!")
 
