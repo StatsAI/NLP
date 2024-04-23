@@ -28,6 +28,10 @@ import streamlit as st
 # import pandas as pd
 
 from unstructured.partition.html import partition_html
+from langchain.document_loaders import UnstructuredURLLoader
+from langchain.vectorstores.chroma import Chroma
+from langchain.embeddings import OpenAIEmbeddings
+from unstructured.embed.openai import OpenAIEmbeddingEncoder
 import requests
 
 st.set_option('deprecation.showPyplotGlobalUse', False)
