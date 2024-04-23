@@ -214,7 +214,7 @@ def import_html_from_web():
 	    # Handle the case where the "url" key doesn't exist or the index is out of range
 	    continue
 	
-	return links
+	return links, cnn_lite_url
 	
 ####################################################################################################################################################
 
@@ -225,8 +225,10 @@ if st.sidebar.button('Summarize relevant docs'):
 		st.write(result.values())
 		
 	if data_source == "Web":
-		result = import_html_from_web()
+		result,url = import_html_from_web()
 		result = result[:-2]
+		st.write(url)
+		st.write("Here are the articles!")
 
 		for element in result:
 			st.write(element)
