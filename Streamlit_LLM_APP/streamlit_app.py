@@ -189,6 +189,32 @@ def import_html_from_github():
 	    continue
 
 	return links
+
+
+def import_html_from_web():
+
+	#1. Get the links for the latest articles from an HTML file (Option 1).
+	#2. Use the Unstructured document loader in Langchain to load the files.
+	#3. Create embeddings for each file using OpenAIEmbeddings.
+	#4. Store the embeddings in Chroma DB.
+	#5. Query Chroma DB to return relevant articles.
+	#6. Summarize the relevant articles using LangChain OpenAI integration.
+	
+	cnn_lite_url = "https://lite.cnn.com/"
+
+	elements = partition_html(url=cnn_lite_url)
+	links = []
+	
+	for element in elements:
+	  try:
+	    if element.links[0]["url"][1:]:
+	      relative_link = element.links[0]["url"][1:]
+	      links.append(f"{cnn_lite_url}{relative_link}")
+	  except IndexError:
+	    # Handle the case where the "url" key doesn't exist or the index is out of range
+	    continue
+	
+	return links
 	
 ####################################################################################################################################################
 
@@ -198,9 +224,10 @@ if st.sidebar.button('Summarize relevant docs'):
 		result = import_html_from_github()
 		st.write(result.values())
 		
-	else:
-		st.write("")
-		#import_html_from_web()
+	if data_source == "Web":
+		result = import_html_from_web()
+		st.write(result.values())
+		
 	#st.pyplot(plot_similar_images_new(image_path, text_input, number_of_images = 17))
 	#text_input = ""
 	#st.session_state.text_input = ""
