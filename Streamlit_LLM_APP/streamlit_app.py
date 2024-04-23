@@ -256,17 +256,22 @@ if st.sidebar.button('Summarize relevant docs'):
 	# 	for element in result:
 	# 		st.write(element)
 
-	result,url = import_html_from_web()
-	result = result[:-2]
-	st.write("Visit the source at: " + url)
-	st.write("Here are the articles!")
+	# result,url = import_html_from_web()
+	# result = result[:-2]
+	# st.write("Visit the source at: " + url)
+	# st.write("Here are the articles!")
+	# for element in result:
+	# 		st.write(element)
+
+	query_docs, chain =  process_text()
 	
-	for element in result:
-			st.write(element)
+	for doc in query_docs:
+		source = doc.metadata
+  		result = chain.invoke([doc])
+  		st.write(result['output_text'])
+  		st.write(source)
+  		st.write('')
 		
-	#st.pyplot(plot_similar_images_new(image_path, text_input, number_of_images = 17))
-	#text_input = ""
-	#st.session_state.text_input = ""
 
 #st.write(text_input)
 ####################################################################################################################################################	
