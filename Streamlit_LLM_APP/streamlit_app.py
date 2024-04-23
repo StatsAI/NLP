@@ -196,7 +196,9 @@ if st.sidebar.button('Summarize relevant docs'):
 
 	if data_source == "Github":
 		import_html_from_github()
+		
 	else:
+		st.write("")
 		#import_html_from_web()
 	#st.pyplot(plot_similar_images_new(image_path, text_input, number_of_images = 17))
 	#text_input = ""
