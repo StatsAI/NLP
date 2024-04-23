@@ -232,20 +232,11 @@ def process_text():
 	embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 	vectorstore = Chroma.from_documents(docs, embeddings)
 	query_docs = vectorstore.similarity_search(text_input, k=5)
-
-	return query_docs
 	
-	#llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo-16k", openai_api_key=open_ai_api_key)
-	#chain = load_summarize_chain(llm, chain_type="stuff")
+	llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo-16k", openai_api_key=open_ai_api_key)
+	chain = load_summarize_chain(llm, chain_type="stuff")
 
-	# for doc in query_docs:
-	# 	source = doc.metadata
-	#result = chain.invoke([doc])
-	#   	print(result['output_text'])
-	#   	print(source)
-	#   	print('')
-
-	
+	return query_docs, chain	
 	
 ####################################################################################################################################################
 
