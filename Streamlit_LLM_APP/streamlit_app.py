@@ -194,7 +194,7 @@ def import_html_from_github():
 
 if st.sidebar.button('Summarize relevant docs'):
 
-	st.write(data_source))
+	st.write(data_source)
 	
 	#import_html_from_github()
 	#st.pyplot(plot_similar_images_new(image_path, text_input, number_of_images = 17))
