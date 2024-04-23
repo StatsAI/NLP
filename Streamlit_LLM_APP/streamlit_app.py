@@ -196,7 +196,7 @@ if st.sidebar.button('Summarize relevant docs'):
 
 	if data_source == "Github":
 		result = import_html_from_github()
-		st.write(result)
+		st.write(result.values())
 		
 	else:
 		st.write("")
