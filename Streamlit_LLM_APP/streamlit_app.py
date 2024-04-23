@@ -3,29 +3,29 @@
 
 import streamlit as st
 #from tqdm import tqdm
-import numpy as np
-from torchvision import transforms
-import torch
-#from torch.autograd import Variable
-import os
-import math
-import time
-import uuid
-from qdrant_client import QdrantClient
-from qdrant_client.http import models as rest
-import requests
-import zipfile
-import json
+# import numpy as np
+# from torchvision import transforms
+# import torch
+# #from torch.autograd import Variable
+# import os
+# import math
+# import time
+# import uuid
+# from qdrant_client import QdrantClient
+# from qdrant_client.http import models as rest
+# import requests
+# import zipfile
+# import json
 
-from langchain_openai import OpenAI
-from typing import List
-from sentence_transformers import SentenceTransformer, util
+# from langchain_openai import OpenAI
+# from typing import List
+# from sentence_transformers import SentenceTransformer, util
 
-#from IPython.display import display
-import matplotlib.pyplot as plt
-from PIL import Image
-from PIL import ImageOps
-import pandas as pd
+# #from IPython.display import display
+# import matplotlib.pyplot as plt
+# from PIL import Image
+# from PIL import ImageOps
+# import pandas as pd
 
 from unstructured.partition.html import partition_html
 import requests
