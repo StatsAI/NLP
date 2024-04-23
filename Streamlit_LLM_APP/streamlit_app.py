@@ -142,11 +142,11 @@ with st.sidebar:
     text_input = st.text_input("CNN Topic Search: Enter topic you want to summarize articles", "", key = "text")
     openai_api_key = st.text_input('OpenAI API Key', "", type='password')
 
-data_source = st.radio(
+with st.sidebar:
+    data_source = st.radio(
     "Select your data source",
-    [":rainbow[Comedy]", "***Drama***", "Documentary :movie_camera:"],
-    index=None,
-)
+    ["GitHub", "Web"],
+    index=None,)
 
 st.write("You selected:", genre)
 
