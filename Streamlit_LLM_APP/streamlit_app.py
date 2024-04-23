@@ -142,11 +142,11 @@ with st.sidebar:
     text_input = st.text_input("CNN Topic Search: Enter topic you want to summarize articles", "", key = "text")
     openai_api_key = st.text_input('OpenAI API Key', "", type='password')
 
-with st.sidebar:
-    data_source = st.radio(
-    "Select your data source",
-    ["GitHub", "Web"],
-    index=None,)
+# with st.sidebar:
+#     data_source = st.radio(
+#     "Select your data source",
+#     ["GitHub", "Web"],
+#     index=None,)
 
 ####################################################################################################################################################
 
@@ -220,18 +220,26 @@ def import_html_from_web():
 
 if st.sidebar.button('Summarize relevant docs'):
 
-	if data_source == "Github":
-		result = import_html_from_github()
-		st.write(result)
+	# if data_source == "Github":
+	# 	result = import_html_from_github()
+	# 	st.write(result)
 		
-	if data_source == "Web":
-		result,url = import_html_from_web()
-		result = result[:-2]
-		st.write("Visit the source at: " + url)
-		##st.write(url)
-		st.write("Here are the articles!")
+	# if data_source == "Web":
+	# 	result,url = import_html_from_web()
+	# 	result = result[:-2]
+	# 	st.write("Visit the source at: " + url)
+	# 	##st.write(url)
+	# 	st.write("Here are the articles!")
 
-		for element in result:
+	# 	for element in result:
+	# 		st.write(element)
+
+	result,url = import_html_from_web()
+	result = result[:-2]
+	st.write("Visit the source at: " + url)
+	st.write("Here are the articles!")
+	
+	for element in result:
 			st.write(element)
 		
 	#st.pyplot(plot_similar_images_new(image_path, text_input, number_of_images = 17))
