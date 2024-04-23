@@ -32,6 +32,8 @@ from langchain.document_loaders import UnstructuredURLLoader
 from langchain.vectorstores.chroma import Chroma
 from langchain.embeddings import OpenAIEmbeddings
 from unstructured.embed.openai import OpenAIEmbeddingEncoder
+from langchain.chat_models import ChatOpenAI
+from langchain.chains.summarize import load_summarize_chain
 import requests
 
 st.set_option('deprecation.showPyplotGlobalUse', False)
@@ -219,6 +221,26 @@ def import_html_from_web():
 	    continue
 	
 	return links, cnn_lite_url
+
+def process_text():
+	
+	embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
+	vectorstore = Chroma.from_documents(docs, embeddings)
+	query_docs = vectorstore.similarity_search(text_input, k=5)
+
+	return query_docs
+	
+	#llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo-16k", openai_api_key=open_ai_api_key)
+	#chain = load_summarize_chain(llm, chain_type="stuff")
+
+	# for doc in query_docs:
+	# 	source = doc.metadata
+	#result = chain.invoke([doc])
+	#   	print(result['output_text'])
+	#   	print(source)
+	#   	print('')
+
+	
 	
 ####################################################################################################################################################
 
