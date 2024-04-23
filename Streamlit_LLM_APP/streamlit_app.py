@@ -187,9 +187,10 @@ def import_html_from_github():
 ####################################################################################################################################################
 
 if st.sidebar.button('Summarize relevant docs'):
+	import_html_from_github()
 	#st.pyplot(plot_similar_images_new(image_path, text_input, number_of_images = 17))
-	text_input = ""
-	st.session_state.text_input = ""
+	#text_input = ""
+	#st.session_state.text_input = ""
 
 #st.write(text_input)
 ####################################################################################################################################################	
