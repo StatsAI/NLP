@@ -226,7 +226,7 @@ if st.sidebar.button('Summarize relevant docs'):
 		
 	if data_source == "Web":
 		result = import_html_from_web()
-		result = result[0:10]
+		result = result[:-2]
 
 		for element in result:
 			st.write(element)
