@@ -188,7 +188,7 @@ def import_html_from_github():
 	    # Handle the case where the "url" key doesn't exist or the index is out of range
 	    continue
 
-	return elements
+	return response.content
 
 
 def import_html_from_web():
