@@ -188,7 +188,7 @@ def import_html_from_github():
 	    # Handle the case where the "url" key doesn't exist or the index is out of range
 	    continue
 
-	return links
+	return elements
 
 
 def import_html_from_web():
@@ -222,7 +222,7 @@ if st.sidebar.button('Summarize relevant docs'):
 
 	if data_source == "Github":
 		result = import_html_from_github()
-		st.write(result.values())
+		st.write(result)
 		
 	if data_source == "Web":
 		result,url = import_html_from_web()
