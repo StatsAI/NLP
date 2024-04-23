@@ -268,9 +268,9 @@ if st.sidebar.button('Summarize relevant docs'):
 	for doc in query_docs:
 		source = doc.metadata
 		result = chain.invoke([doc])
-  		st.write(result['output_text'])
-  		st.write(source)
-  		st.write('')
+		st.write(result['output_text'])
+		st.write(source)
+		st.write('')
 		
 
 #st.write(text_input)
