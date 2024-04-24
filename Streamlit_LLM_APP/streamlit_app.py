@@ -34,7 +34,8 @@ from langchain_community.embeddings import OpenAIEmbeddings
 from unstructured.embed.openai import OpenAIEmbeddingEncoder
 from langchain_community.chat_models import ChatOpenAI
 from langchain.chains.summarize import load_summarize_chain
-from opencv-python-headless import cv2
+import cv2
+
 import requests
 
 #st.set_option('deprecation.showPyplotGlobalUse', False)
