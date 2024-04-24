@@ -84,13 +84,13 @@ st.markdown(
 # with st.sidebar:
 #     st.image(logo)
 
-# st.markdown("""
-#         <style>
-#                .block-container {
-# 		    padding-top: 0;
-#                 }
-#         </style>
-#         """, unsafe_allow_html=True)
+st.markdown("""
+        <style>
+               .block-container {
+		    padding-top: 0;
+                }
+        </style>
+        """, unsafe_allow_html=True)
 
 # #st.write('')
 # #st.write('')
