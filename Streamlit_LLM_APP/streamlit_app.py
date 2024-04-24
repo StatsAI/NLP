@@ -252,10 +252,10 @@ def process_text():
 
 	loaders = UnstructuredURLLoader(urls=links, show_progress_bar=False)
 
-	try:
-		docs = loaders.load()
-	except ImportError:
-  		print("")
+	# try:
+	# 	docs = loaders.load()
+	# except ImportError:
+ #  		print("")
   
 	docs = loaders.load()
 
