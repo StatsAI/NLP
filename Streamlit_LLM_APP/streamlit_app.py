@@ -263,7 +263,7 @@ def process_text():
 		source = doc.metadata
 		result = chain.invoke([doc])
 		st.write(result['output_text'])
-		st.write(source)
+		st.write(source.values())
 		st.write('')	
 	
 ####################################################################################################################################################
