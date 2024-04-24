@@ -257,7 +257,7 @@ def process_text():
 	except ImportError:
   		print("")
   
-	#docs = loaders.load()
+	docs = loaders.load()
 
 	#clip_embd = OpenCLIPEmbeddings(model_name="ViT-g-14", checkpoint="laion2b_s34b_b88k")
 	#embeddings = clip_embd.embed_documents(docs)
