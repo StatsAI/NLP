@@ -224,7 +224,26 @@ def import_html_from_web():
 
 def process_text():
 
-	links, cnn_lite_url = import_html_from_web()
+	#1. Get the links for the latest articles from an HTML file (Option 1).
+	#2. Use the Unstructured document loader in Langchain to load the files.
+	#3. Create embeddings for each file using OpenAIEmbeddings.
+	#4. Store the embeddings in Chroma DB.
+	#5. Query Chroma DB to return relevant articles.
+	#6. Summarize the relevant articles using LangChain OpenAI integration.
+	
+	cnn_lite_url = "https://lite.cnn.com/"
+
+	elements = partition_html(url=cnn_lite_url)
+	links = []
+	
+	for element in elements:
+	  try:
+	    if element.links[0]["url"][1:]:
+	      relative_link = element.links[0]["url"][1:]
+	      links.append(f"{cnn_lite_url}{relative_link}")
+	  except IndexError:
+	    # Handle the case where the "url" key doesn't exist or the index is out of range
+	    continue
 
 	loaders = UnstructuredURLLoader(urls=links, show_progress_bar=False)
 	docs = loaders.load()
