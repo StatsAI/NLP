@@ -226,7 +226,7 @@ def process_text():
 
 	links, cnn_lite_url = import_html_from_web()
 
-	loaders = UnstructuredURLLoader(urls=links, show_progress_bar=True)
+	loaders = UnstructuredURLLoader(urls=links, show_progress_bar=False)
 	docs = loaders.load()
 	
 	embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
