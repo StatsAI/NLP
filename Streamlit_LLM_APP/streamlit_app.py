@@ -36,7 +36,7 @@ from langchain_community.chat_models import ChatOpenAI
 from langchain.chains.summarize import load_summarize_chain
 import requests
 
-st.set_option('deprecation.showPyplotGlobalUse', False)
+#st.set_option('deprecation.showPyplotGlobalUse', False)
 
 ####################################################################################################################################################
 
