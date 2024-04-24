@@ -253,10 +253,10 @@ def process_text():
 	loaders = UnstructuredURLLoader(urls=links, show_progress_bar=False)
 	docs = loaders.load()
 
-	clip_embd = OpenCLIPEmbeddings(model_name="ViT-g-14", checkpoint="laion2b_s34b_b88k")
-	embeddings = clip_embd.embed_documents(docs)
+	#clip_embd = OpenCLIPEmbeddings(model_name="ViT-g-14", checkpoint="laion2b_s34b_b88k")
+	#embeddings = clip_embd.embed_documents(docs)
 
-	#embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
+	embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 	
 	vectorstore = Chroma.from_documents(docs, embeddings)
 	
