@@ -289,7 +289,7 @@ if st.sidebar.button('Summarize relevant docs'):
 	# for element in result:
 	# 		st.write(element)
 
-	import_html_from_web():
+	import_html_from_web()
 
 	
 		
