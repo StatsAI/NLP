@@ -34,7 +34,7 @@ from langchain_community.embeddings import OpenAIEmbeddings
 from unstructured.embed.openai import OpenAIEmbeddingEncoder
 from langchain_community.chat_models import ChatOpenAI
 from langchain.chains.summarize import load_summarize_chain
-import cv2
+#import cv2
 
 import requests
 
