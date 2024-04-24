@@ -260,9 +260,9 @@ def process_text():
 	for doc in query_docs:
 		source = doc.metadata
 		result = chain.invoke([doc])
-		print(result['output_text'])
-		print(source)
-		print('')	
+		st.write(result['output_text'])
+		st.write(source)
+		st.write('')	
 	
 ####################################################################################################################################################
 
