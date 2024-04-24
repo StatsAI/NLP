@@ -19,7 +19,7 @@ import streamlit as st
 
 # from langchain_openai import OpenAI
 # from typing import List
-from sentence_transformers import SentenceTransformer, util
+#from sentence_transformers import SentenceTransformer, util
 
 # #from IPython.display import display
 # import matplotlib.pyplot as plt
@@ -34,7 +34,8 @@ from langchain_community.embeddings import OpenAIEmbeddings
 from unstructured.embed.openai import OpenAIEmbeddingEncoder
 from langchain_community.chat_models import ChatOpenAI
 from langchain.chains.summarize import load_summarize_chain
-#import cv2
+import numpy as np
+from langchain_experimental.open_clip import OpenCLIPEmbeddings
 
 import requests
 
@@ -251,8 +252,11 @@ def process_text():
 
 	loaders = UnstructuredURLLoader(urls=links, show_progress_bar=False)
 	docs = loaders.load()
-	
-	embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
+
+	clip_embd = OpenCLIPEmbeddings(model_name="ViT-g-14", checkpoint="laion2b_s34b_b88k")
+	embeddings = clip_embd.embed_documents(docs)
+
+	#embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 	
 	vectorstore = Chroma.from_documents(docs, embeddings)
 	
