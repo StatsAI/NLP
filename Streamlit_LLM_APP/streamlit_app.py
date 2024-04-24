@@ -256,7 +256,7 @@ def process_text():
 	
 	query_docs = vectorstore.similarity_search(text_input, k=5)
 	
-	llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo-16k", openai_api_key=open_ai_api_key)
+	llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo-16k", openai_api_key=openai_api_key)
 	chain = load_summarize_chain(llm, chain_type="stuff")
 
 	for doc in query_docs:
