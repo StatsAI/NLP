@@ -28,11 +28,11 @@ import streamlit as st
 # import pandas as pd
 
 from unstructured.partition.html import partition_html
-from langchain.document_loaders import UnstructuredURLLoader
+from langchain_community.document_loaders import UnstructuredURLLoader
 from langchain.vectorstores.chroma import Chroma
-from langchain.embeddings import OpenAIEmbeddings
+from langchain_community.embeddings import OpenAIEmbeddings
 from unstructured.embed.openai import OpenAIEmbeddingEncoder
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
 from langchain.chains.summarize import load_summarize_chain
 import requests
 
