@@ -224,7 +224,7 @@ def import_html_from_web():
 
 def process_text():
 
-	links,__ = import_html_from_web()
+	links, cnn_lite_url = import_html_from_web()
 
 	loaders = UnstructuredURLLoader(urls=links, show_progress_bar=True)
 	docs = loaders.load()
