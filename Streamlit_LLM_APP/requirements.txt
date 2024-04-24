@@ -11,10 +11,10 @@ streamlit==1.31.1
 #qdrant_client==1.3.2 
 pyarrow
 openai==1.12.0
-langchain==0.1.7
-cohere==4.47 
+langchain==0.1.16
+cohere==5.3.3
 tiktoken==0.6.0
-langchain-openai==0.0.6
+langchain-openai==0.1.3
 
 unstructured[all-docs]
 unstructured[openai]
