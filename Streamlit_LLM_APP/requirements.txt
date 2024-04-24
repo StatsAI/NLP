@@ -4,6 +4,7 @@ streamlit==1.33.0
 #matplotlib==3.7.2
 #Pillow==9.5.0
 #tqdm==4.65.0
+pillow
 numpy
 torch
 #torchvision==0.15.2
