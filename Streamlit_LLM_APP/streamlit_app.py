@@ -19,7 +19,7 @@ import streamlit as st
 
 # from langchain_openai import OpenAI
 # from typing import List
-# from sentence_transformers import SentenceTransformer, util
+from sentence_transformers import SentenceTransformer, util
 
 # #from IPython.display import display
 # import matplotlib.pyplot as plt
