@@ -230,7 +230,9 @@ def process_text():
 	docs = loaders.load()
 	
 	embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
+	
 	vectorstore = Chroma.from_documents(docs, embeddings)
+	
 	query_docs = vectorstore.similarity_search(text_input, k=5)
 	
 	llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo-16k", openai_api_key=open_ai_api_key)
