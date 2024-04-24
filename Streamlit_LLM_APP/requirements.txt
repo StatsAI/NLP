@@ -20,3 +20,4 @@ opencv-python-headless==4.9.0.80
 unstructured[all-docs]
 unstructured[openai]
 chromadb==0.3.29
+libgl1
