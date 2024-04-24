@@ -94,8 +94,10 @@ import requests
 
 # #st.write('')
 # #st.write('')
+cnn_lite_url = "https://lite.cnn.com/"
+
 st.title("CNN News Summarization via Unstructured + LangChain + ChromaDB + OpenAI")
-st.write("This app enables a user to automatically search/summarize the latest CNN articles!")
+st.write("This app enables a user to automatically search/summarize the latest CNN articles from " + cnn_lite_url)
 
 # images_recs = st.sidebar.slider(label = 'Image Search: Select an animal using the slider', min_value = 1,
 #                           max_value = 5400,
@@ -262,7 +264,7 @@ def process_text():
 	for count,doc in enumerate(query_docs):
 		source = doc.metadata
 		result = chain.invoke([doc])
-		st.write(count + ": " + result['output_text'])
+		st.write(str(count) + ": " + result['output_text'])
 		st.write("Source: ", list(source.values())[0])
 		st.write('')	
 	
