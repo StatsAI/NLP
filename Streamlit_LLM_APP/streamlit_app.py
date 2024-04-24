@@ -30,7 +30,7 @@ import streamlit as st
 from unstructured.partition.html import partition_html
 from langchain_community.document_loaders import UnstructuredURLLoader
 from langchain.vectorstores.chroma import Chroma
-from langchain_community.embeddings import OpenAIEmbeddings
+#from langchain_community.embeddings import OpenAIEmbeddings
 from unstructured.embed.openai import OpenAIEmbeddingEncoder
 from langchain_community.chat_models import ChatOpenAI
 from langchain.chains.summarize import load_summarize_chain
