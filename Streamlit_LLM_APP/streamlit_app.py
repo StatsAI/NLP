@@ -259,10 +259,10 @@ def process_text():
 	llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo-16k", openai_api_key=openai_api_key)
 	chain = load_summarize_chain(llm, chain_type="stuff")
 
-	for doc in query_docs:
+	for count,doc in enumerate(query_docs):
 		source = doc.metadata
 		result = chain.invoke([doc])
-		st.write(result['output_text'])
+		st.write(count + ": " + result['output_text'])
 		st.write("Source: ", list(source.values())[0])
 		st.write('')	
 	
