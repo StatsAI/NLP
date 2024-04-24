@@ -257,7 +257,12 @@ def process_text():
 	llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo-16k", openai_api_key=open_ai_api_key)
 	chain = load_summarize_chain(llm, chain_type="stuff")
 
-	return query_docs, chain	
+	for doc in query_docs:
+		source = doc.metadata
+		result = chain.invoke([doc])
+		print(result['output_text'])
+		print(source)
+		print('')	
 	
 ####################################################################################################################################################
 
@@ -284,14 +289,7 @@ if st.sidebar.button('Summarize relevant docs'):
 	# for element in result:
 	# 		st.write(element)
 
-	query_docs, chain =  process_text()
 	
-	for doc in query_docs:
-		source = doc.metadata
-		result = chain.invoke([doc])
-		st.write(result['output_text'])
-		st.write(source)
-		st.write('')
 		
 
 #st.write(text_input)
