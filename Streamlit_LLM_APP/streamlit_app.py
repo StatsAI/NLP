@@ -251,7 +251,13 @@ def process_text():
 	    continue
 
 	loaders = UnstructuredURLLoader(urls=links, show_progress_bar=False)
-	docs = loaders.load()
+
+	try:
+		docs = loaders.load()
+	except ImportError:
+  		print("")
+  
+	#docs = loaders.load()
 
 	#clip_embd = OpenCLIPEmbeddings(model_name="ViT-g-14", checkpoint="laion2b_s34b_b88k")
 	#embeddings = clip_embd.embed_documents(docs)
