@@ -1,7 +1,8 @@
-unstructured[all-docs]
+unstructured[all-docs] == 0.16.23
 langchain
 langchain-community
 langchain-huggingface
 sentence-transformers
 chromadb
+sqlite3 == 3.35.0
 langchain-google-genai
