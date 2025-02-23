@@ -2,70 +2,119 @@
 # No part of this code may be used or reproduced without express permission.
 
 import streamlit as st
-#from tqdm import tqdm
-# import numpy as np
-# from torchvision import transforms
-# import torch
-# #from torch.autograd import Variable
-# import os
-# import math
-# import time
-# import uuid
-# from qdrant_client import QdrantClient
-# from qdrant_client.http import models as rest
-# import requests
-# import zipfile
-# import json
-
-# from langchain_openai import OpenAI
-# from typing import List
-#from sentence_transformers import SentenceTransformer, util
-
-# #from IPython.display import display
-# import matplotlib.pyplot as plt
-# from PIL import Image
-# from PIL import ImageOps
-# import pandas as pd
-
+from langchain_google_genai import ChatGoogleGenerativeAI
+from sentence_transformers import SentenceTransformer, util
 from unstructured.partition.html import partition_html
-from langchain_community.document_loaders import UnstructuredURLLoader
+from langchain.document_loaders import UnstructuredURLLoader
+import chromadb
 from langchain.vectorstores.chroma import Chroma
-from langchain_community.embeddings import OpenAIEmbeddings
-from unstructured.embed.openai import OpenAIEmbeddingEncoder
-from langchain_community.chat_models import ChatOpenAI
-from langchain.chains.summarize import load_summarize_chain
-import cv2
-#import numpy as np
-#from langchain_experimental.open_clip import OpenCLIPEmbeddings
+from langchain.embeddings import SentenceTransformerEmbeddings
 
-import requests
-
-#st.set_option('deprecation.showPyplotGlobalUse', False)
+st.set_option('deprecation.showPyplotGlobalUse', False)
 
 ####################################################################################################################################################
 
-#from unstructured.partition.html import partition_html
-#import requests
+# Download and unzip images
+@st.cache_resource
+def download_and_unzip(url):
+	response = requests.get(url)
+	with open("archive.zip", "wb") as f:
+        	f.write(response.content)
+	
+	with zipfile.ZipFile("archive.zip", "r") as zip_ref:
+        	zip_ref.extractall()
+
+@st.cache_resource
+def load_data(folder_list: list):
+	image_path = []
+	
+	for folder in folder_list:
+		for root, dirs, files in os.walk(folder):
+			for file in files:
+				if file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')):
+					image_path.append(os.path.join(root, file))
+	return image_path
+
+@st.cache_resource
+def load_embeddings():
+	url = "https://github.com/StatsAI/streamlit_image_search_db/releases/download/image_search_assets/img_dict.txt"
+
+	# Download the file
+	response = requests.get(url)
+
+	# Load the file into a string
+	file_content = response.content.decode("utf-8")
+
+	# Create a dictionary from the string
+	img_dict = json.loads(file_content)
+	
+	img_list = list(img_dict.keys())
+	#img_emb = list(img_dict.values())
+
+	img_values = list(img_dict.values())
+	img_emb= [value[0] for value in img_values]
+	img_type = [value[1] for value in img_values]
+		
+	return img_list, img_emb, img_type
 
 
-#links
+## Load Pre-trained Assets
+@st.cache_resource
+def load_assets():
+	# Load images from a folder
+	#image_list = load_data(['animals'])
+
+	# Load indexed images
+	image_list, img_emb_loaded, img_type = load_embeddings()
+	img_emb_loaded = torch.tensor(img_emb_loaded)
+
+	return image_list, img_emb_loaded, img_type
+
+# Set up the search engine
+@st.cache_resource
+def load_model():
+	model = SentenceTransformer("clip-ViT-B-32")
+	return model
+
+@st.cache_resource
+def create_vector_db_input(_img_emb_loaded):
+	img_emb_loaded = _img_emb_loaded.tolist()
+	image_names = range(0,len(image_list))
+
+	client = QdrantClient(
+		url = st.secrets["url"], 
+		api_key = st.secrets["api_key"]
+		,)
+	
+	return client
+
+#@st.cache_resource
+def vector_db(client, animal_embedding):
+
+	animal_embedding = animal_embedding.tolist()
+	
+	results = client.search(collection_name="animals",
+				query_vector=animal_embedding,
+				with_payload=True,
+				limit=16)
+
+	return results
+####################################################################################################################################################
+
+url = "https://github.com/StatsAI/streamlit_image_search_db/releases/download/image_search_assets/archive.zip"
+download_and_unzip(url)
+
+image_list, img_emb_loaded, img_type = load_assets()
+
+model = load_model()
+
+client = create_vector_db_input(img_emb_loaded)
 
 ####################################################################################################################################################
 
-# url = "https://github.com/StatsAI/streamlit_image_search_db/releases/download/image_search_assets/archive.zip"
-# download_and_unzip(url)
-
-# image_list, img_emb_loaded, img_type = load_assets()
-
-# model = load_model()
-
-# client = create_vector_db_input(img_emb_loaded)
-
-####################################################################################################################################################
-
-# logo = Image.open('images/picture.png')
-# #newsize = (95, 95)
-# #logo = logo.resize(newsize)
+logo = Image.open('images/picture.png')
+#newsize = (95, 95)
+#logo = logo.resize(newsize)
 
 st.markdown(
     """
@@ -83,8 +132,8 @@ st.markdown(
     """, unsafe_allow_html=True
 )
 
-# with st.sidebar:
-#     st.image(logo)
+with st.sidebar:
+    st.image(logo)
 
 st.markdown("""
         <style>
@@ -94,218 +143,101 @@ st.markdown("""
         </style>
         """, unsafe_allow_html=True)
 
-# #st.write('')
-# #st.write('')
-cnn_lite_url = "https://lite.cnn.com/"
+#st.write('')
+#st.write('')
+st.title("Reverse Image Search via CLIP + Vector Database + LLM Summary")
+#st.write("This app performs reverse image search using OpenAI's CLIP + Qdrant Vector Database")
 
-st.title("CNN News Summarization via Unstructured + LangChain + ChromaDB + OpenAI")
-st.write("This app enables a user to summarize the latest articles from CNN about a topic: " + cnn_lite_url)
+images_recs = st.sidebar.slider(label = 'Image Search: Select an animal using the slider', min_value = 1,
+                          max_value = 5400,
+                          value = 1859,
+                          step = 1)
 
-# images_recs = st.sidebar.slider(label = 'Image Search: Select an animal using the slider', min_value = 1,
-#                           max_value = 5400,
-#                           value = 1859,
-#                           step = 1)
+image_path = image_list[images_recs - 1]
+image_path_image = Image.open(image_path)
 
-# image_path = image_list[images_recs - 1]
-# image_path_image = Image.open(image_path)
-
-# #resize_factor = 0.5  # Adjust this value for your desired percentage (e.g., 0.5 for 50% size)
-# #new_width = int(image_path_image.width * resize_factor)
-# #new_height = int(image_path_image.height * resize_factor)
-# #image_path_image = image_path_image .resize((new_width, new_height))
-
-# st.sidebar.write('')
-# st.sidebar.write('')
-# st.sidebar.write('')
-# st.sidebar.write('')
-
-# with st.sidebar:
-# 	# Display an image	
-#         #st.image(image_path).resize(newsize)
-# 	st.image(image_path_image)
-
-
-# st.markdown(
-#     """
-#     <style>
-#         [data-testid=stSidebar]{
-#             text-align: center;
-#             display: block;
-#             margin-left: auto;
-# 	    margin-bottm:-75px;
-#             margin-right: auto;
-# 	    margin-top: -75px;     
-#             width: 100%;
-# 	    margin: 0;	         		
-#         }
-#     </style>
-#     """, unsafe_allow_html=True
-# )
+st.sidebar.write('')
+st.sidebar.write('')
+st.sidebar.write('')
+st.sidebar.write('')
 
 with st.sidebar:
-    # st.markdown("""
-    #     <style>
-    #         [data-testid=stTextInput] {
-    #             height: -5px;  # Adjust the height as needed
-    #         }
-    #     </style>
-    # """, unsafe_allow_html=True)
+	# Display an image	
+        #st.image(image_path).resize(newsize)
+	st.image(image_path_image)
 
-    text_input = st.text_input("CNN Topic Search: Enter topic you want to summarize articles", "", key = "text")
-    openai_api_key = st.text_input('OpenAI API Key', "", type='password')
+with st.sidebar:
+    st.markdown("""
+        <style>
+            [data-testid=stTextInput] {
+                height: -5px;  # Adjust the height as needed
+            }
+        </style>
+    """, unsafe_allow_html=True)
 
-# with st.sidebar:
-#     data_source = st.radio(
-#     "Select your data source",
-#     ["GitHub", "Web"],
-#     index=None,)
+    text_input = st.text_input("Text Search: Enter animal. (Delete to use slider)", "", key = "text")
+    openai_api_key = st.text_input('Gemini API Key', "", type='password')
 
 ####################################################################################################################################################
 
 #@st.cache_resource
-def import_html_from_github():
-
-	#1. Get the links for the latest articles from an HTML file (Option 1).
-	#2. Use the Unstructured document loader in Langchain to load the files.
-	#3. Create embeddings for each file using OpenAIEmbeddings.
-	#4. Store the embeddings in Chroma DB.
-	#5. Query Chroma DB to return relevant articles.
-	#6. Summarize the relevant articles using LangChain OpenAI integration.
+def plot_similar_images_new(image_path, text_input, number_of_images: int = 6):
 	
-	url = "https://github.com/StatsAI/NLP/blob/main/Breaking%20News%2C%20Latest%20News%20and%20Videos%20_%20CNN.html"
+	animal_embedding = model.encode(image_path)	
 
-	try:
-    		response = requests.get(url, allow_redirects=True)
-    		response.raise_for_status()  # Raise error if download fails
-	except requests.exceptions.RequestException as e:
-    		print(f"Error downloading HTML: {e}")
-    		exit(1)
-
-	# Save the content to a file
-	with open("downloaded_html.html", "wb") as f:
-	    f.write(response.content)
-
-	elements = partition_html(filename='downloaded_html.html')
-	elements = elements[3].links
+	if text_input:
+		animal_embedding = model.encode(text_input)
+		st.session_state.text_input = ""
 	
-	links = []
-	cnn_lite_url = "https://lite.cnn.com/"
+	animal_embedding = torch.tensor(animal_embedding)
+
+	################################################################################################################
+	# Start of leveraging output of Qdrant	
+	results = vector_db(client, animal_embedding)
+	results = results[1:]
+
+	result_image_type = results[0].payload['type'].capitalize()
+	result_str = "You selected the following animal: " + result_image_type	
 	
-	for element in elements:
-	  try:
-	    if element["url"][3:-2]:
-	      relative_link = element["url"][3:-2]
-	      links.append(f"{cnn_lite_url}{relative_link}")
-	  except IndexError:
-	    # Handle the case where the "url" key doesn't exist or the index is out of range
-	    continue
+	if openai_api_key != "":		
+		# llm = OpenAI(temperature=0.7, openai_api_key=openai_api_key)
+		# input_text = "Summarize in 100 words, the most interesting things about the following animal: " + result_str
+		# response = llm(input_text)
+		# st.write(response)
 
-	return response.content
+		llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0.7, max_tokens=None, timeout=None, max_retries=2, google_api_key=openai_api_key)
+		input_text = "Summarize in 100 words, the most interesting things about the following animal: " + result_image_type
+		response = llm.invoke(input_text)
+		st.write(response.content)
 
+	else:
+		st.write(result_str  + ".")
+		st.write("Enter an API Key to learn more about " + result_image_type + 's!')
 
-def import_html_from_web():
+	grid_size = math.ceil(math.sqrt(number_of_images))
+	axes = []
+	fig = plt.figure(figsize=(20, 15))
+        
+	for i in range(len(results)):
+		axes.append(fig.add_subplot(grid_size, grid_size, i + 1))
+		plt.axis('off')
+		#image_name = results[i].payload['image_name']
+		image_path = results[i].payload['image_path']
+		#image_type = results[i].payload['type']
+		#image_score = results[i].score
+		img = Image.open(image_path)
+		img_resized = ImageOps.fit(img, (224, 224), Image.LANCZOS)
+		plt.imshow(img_resized)
+	#plt.title(f"Image {i}: {score}", fontsize=18)
+	fig.tight_layout()
+	fig.subplots_adjust(top=0.93)
 
-	#1. Get the links for the latest articles from an HTML file (Option 1).
-	#2. Use the Unstructured document loader in Langchain to load the files.
-	#3. Create embeddings for each file using OpenAIEmbeddings.
-	#4. Store the embeddings in Chroma DB.
-	#5. Query Chroma DB to return relevant articles.
-	#6. Summarize the relevant articles using LangChain OpenAI integration.
-	
-	cnn_lite_url = "https://lite.cnn.com/"
-
-	elements = partition_html(url=cnn_lite_url)
-	links = []
-	
-	for element in elements:
-	  try:
-	    if element.links[0]["url"][1:]:
-	      relative_link = element.links[0]["url"][1:]
-	      links.append(f"{cnn_lite_url}{relative_link}")
-	  except IndexError:
-	    # Handle the case where the "url" key doesn't exist or the index is out of range
-	    continue
-	
-	return links, cnn_lite_url
-
-def process_text():
-
-	#1. Get the links for the latest articles from an HTML file (Option 1).
-	#2. Use the Unstructured document loader in Langchain to load the files.
-	#3. Create embeddings for each file using OpenAIEmbeddings.
-	#4. Store the embeddings in Chroma DB.
-	#5. Query Chroma DB to return relevant articles.
-	#6. Summarize the relevant articles using LangChain OpenAI integration.
-	
-	cnn_lite_url = "https://lite.cnn.com/"
-
-	elements = partition_html(url=cnn_lite_url)
-	links = []
-	
-	for element in elements:
-	  try:
-	    if element.links[0]["url"][1:]:
-	      relative_link = element.links[0]["url"][1:]
-	      links.append(f"{cnn_lite_url}{relative_link}")
-	  except IndexError:
-	    # Handle the case where the "url" key doesn't exist or the index is out of range
-	    continue
-
-	loaders = UnstructuredURLLoader(urls=links, show_progress_bar=False)
-
-	# try:
-	# 	docs = loaders.load()
-	# except ImportError:
- #  		print("")
-  
-	docs = loaders.load()
-
-	#clip_embd = OpenCLIPEmbeddings(model_name="ViT-g-14", checkpoint="laion2b_s34b_b88k")
-	#embeddings = clip_embd.embed_documents(docs)
-
-	embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
-	
-	vectorstore = Chroma.from_documents(docs, embeddings)
-	
-	query_docs = vectorstore.similarity_search(text_input, k=5)
-	
-	llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo-16k", openai_api_key=openai_api_key)
-	chain = load_summarize_chain(llm, chain_type="stuff")
-
-	for count,doc in enumerate(query_docs, start=1):
-		source = doc.metadata
-		result = chain.invoke([doc])
-		st.write(str(count) + ": " + result['output_text'])
-		st.write("Source: ", list(source.values())[0])
-		st.write('')	
-	
 ####################################################################################################################################################
 
-if st.sidebar.button('Summarize relevant docs'):
+if st.sidebar.button('Get Similar Images'):
+	st.pyplot(plot_similar_images_new(image_path, text_input, number_of_images = 17))
+	text_input = ""
+	st.session_state.text_input = ""
 
-	# if data_source == "Github":
-	# 	result = import_html_from_github()
-	# 	st.write(result)
-		
-	# if data_source == "Web":
-	# 	result,url = import_html_from_web()
-	# 	result = result[:-2]
-	# 	st.write("Visit the source at: " + url)
-	# 	##st.write(url)
-	# 	st.write("Here are the articles!")
-
-	# 	for element in result:
-	# 		st.write(element)
-
-	# result,url = import_html_from_web()
-	# result = result[:-2]
-	# st.write("Visit the source at: " + url)
-	# st.write("Here are the articles!")
-	# for element in result:
-	# 		st.write(element)
-
-	process_text()
-
-	
-		
+#st.write(text_input)
 ####################################################################################################################################################	
