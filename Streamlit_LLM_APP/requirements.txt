@@ -4,5 +4,5 @@ langchain-community == 0.3.18
 langchain-huggingface == 0.1.2
 sentence-transformers == 3.4.1
 chromadb == 0.6.3
-sqlite3 == 3.35.0
+#sqlite3 == 3.35.0
 langchain-google-genai == 2.0.10
