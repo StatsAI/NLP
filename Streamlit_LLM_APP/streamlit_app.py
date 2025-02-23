@@ -3,7 +3,7 @@
 
 import streamlit as st
 from langchain_google_genai import ChatGoogleGenerativeAI
-from sentence_transformers import SentenceTransformer, util
+#from sentence_transformers import SentenceTransformer
 from unstructured.partition.html import partition_html
 from langchain.document_loaders import UnstructuredURLLoader
 import chromadb
