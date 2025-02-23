@@ -1,14 +1,23 @@
 # © Stats AI LLC 2023. All Rights Reserved. 
 # No part of this code may be used or reproduced without express permission.
 
+# import streamlit as st
+# from langchain_google_genai import ChatGoogleGenerativeAI
+# #from sentence_transformers import SentenceTransformer
+# from unstructured.partition.html import partition_html
+# from langchain.document_loaders import UnstructuredURLLoader
+# import chromadb
+# from langchain.vectorstores.chroma import Chroma
+# from langchain.embeddings import SentenceTransformerEmbeddings
+
 import streamlit as st
-from langchain_google_genai import ChatGoogleGenerativeAI
-#from sentence_transformers import SentenceTransformer
 from unstructured.partition.html import partition_html
 from langchain.document_loaders import UnstructuredURLLoader
 import chromadb
 from langchain.vectorstores.chroma import Chroma
 from langchain.embeddings import SentenceTransformerEmbeddings
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain.chains.summarize import load_summarize_chain
 
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
